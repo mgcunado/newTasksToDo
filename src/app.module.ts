@@ -12,6 +12,7 @@ import * as path from 'path';
 import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { TranslationsController } from './translations/translations.controller';
 import { TranslationsModule } from './translations/translations.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({ 
   imports: [
@@ -24,7 +25,7 @@ import { TranslationsModule } from './translations/translations.module';
       resolvers: [
         { use: QueryResolver, options: ['lang'] },
         AcceptLanguageResolver,
-        ],
+      ],
     }),
     DatabaseModule,
     UsersModule,
@@ -33,7 +34,11 @@ import { TranslationsModule } from './translations/translations.module';
     SubcategoryModule,
     PriorityModule,
     TaskModule,
-    TranslationsModule],
+    TranslationsModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+  ],
   controllers: [AppController, TranslationsController],
   providers: [AppService],
 })

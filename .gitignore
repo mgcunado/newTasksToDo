@@ -2,6 +2,7 @@
 databaseData.sql
 info
 routes.http
+.env
 
 # compiled output
 /dist

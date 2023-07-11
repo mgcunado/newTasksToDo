@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from 
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-// import { I18n, I18nContext } from 'nestjs-i18n';
 
 @Controller('categories')
 export class CategoryController {
@@ -17,12 +16,6 @@ export class CategoryController {
   getCategories() {
     return this.categoryService.getCategories();
   }
-
-  // using translation in backend
-  // @Get()
-  // getCategories(@I18n() i18n: I18nContext) {
-  //   return this.categoryService.getCategories(i18n);
-  // }
 
   @Get(':id')
   getCategory(@Param('id') id: string) {

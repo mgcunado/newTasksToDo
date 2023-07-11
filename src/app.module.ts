@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { PostsModule } from './posts/posts.module';
+import { UserModule } from './user/user.module';
 import { CategoryModule } from './category/category.module';
 import { SubcategoryModule } from './subcategory/subcategory.module';
 import { DatabaseModule } from './database/database.module';
@@ -13,6 +12,7 @@ import { AcceptLanguageResolver, I18nModule, QueryResolver } from 'nestjs-i18n';
 import { TranslationsController } from './translations/translations.controller';
 import { TranslationsModule } from './translations/translations.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({ 
   imports: [
@@ -28,8 +28,8 @@ import { ConfigModule } from '@nestjs/config';
       ],
     }),
     DatabaseModule,
-    UsersModule,
-    PostsModule,
+    AuthModule,
+    UserModule,
     CategoryModule,
     SubcategoryModule,
     PriorityModule,

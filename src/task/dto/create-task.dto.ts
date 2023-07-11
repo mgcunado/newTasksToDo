@@ -1,7 +1,7 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateTaskDto {
-  @IsNotEmpty()
+  @IsNotEmpty({"message" : "Task field cannot be empty"})
   task: string;
   deadline?: string;
   realizationDate?: string;

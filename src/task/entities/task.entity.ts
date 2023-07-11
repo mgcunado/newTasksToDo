@@ -1,5 +1,6 @@
 import { Priority } from "src/priority/entities/priority.entity";
 import { Subcategory } from "src/subcategory/entities/subcategory.entity";
+import { User } from "src/user/user.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity({ name: 'tasks' })
@@ -35,7 +36,10 @@ export class Task {
 
   @ManyToOne(() => Priority, priority => priority.tasks)
   priority: Priority
+
+  @Column({ nullable: true })
+  authorId?: number 
+
+  @ManyToOne(() => User, user => user.tasks, { nullable: true })
+  author?: User
 }
-
-// id priority_id subcategory_id task deadline realizationDate done comment
-

@@ -2,13 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Not, IsNull } from 'typeorm';
 import { CategoryService } from 'src/category/category.service';
-// import { Subcategory } from 'src/subcategory/entities/subcategory.entity';
 import { SubcategoryService } from 'src/subcategory/subcategory.service';
 import { Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Task } from './entities/task.entity';
-// import { I18n, I18nContext } from 'nestjs-i18n';
 
 interface CreateTaskResponse {
   status: string;
@@ -40,11 +38,6 @@ export class TaskService {
       status: 'created',
       task,
     }
-  }
-
-  // tellMeCategory(@I18n() i18n: I18nContext) {
-  tellMeCategory(i18n: any) {
-    return i18n.t(`categories.invoices`);
   }
 
   async getAllTasks(todo?: string, orderBy: { [key: string]: 'ASC' | 'DESC' } = { task: 'ASC' }): Promise<{ status: string; tasks: Task[] }> {
@@ -118,8 +111,6 @@ export class TaskService {
     }
 
     let updatedTask = Object.assign(taskFound, task)
-
-    // return this.taskRepository.save(updatedTask)
 
     updatedTask = await this.taskRepository.save(updatedTask)
     return {

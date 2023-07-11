@@ -3,7 +3,6 @@ import { SubcategoryService } from './subcategory.service';
 import { CreateSubcategoryDto } from './dto/create-subcategory.dto';
 import { UpdateSubcategoryDto } from './dto/update-subcategory.dto';
 
-// @Controller('subcategories')
 @Controller('categories/:categoryId/subcategories')
 export class SubcategoryController {
   constructor(private readonly subcategoryService: SubcategoryService) {}

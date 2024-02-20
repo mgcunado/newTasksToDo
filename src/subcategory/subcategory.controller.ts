@@ -1,14 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { SubcategoryService } from './subcategory.service';
 import { CreateSubcategoryDto } from './dto/create-subcategory.dto';
 import { UpdateSubcategoryDto } from './dto/update-subcategory.dto';
+import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { Subcategory } from './entities/subcategory.entity';
 
+@UseGuards(JWTAuthGuard)
 @Controller('categories/:categoryId/subcategories')
 export class SubcategoryController {
   constructor(private readonly subcategoryService: SubcategoryService) {}
 
   @Post()
-  createSubcategory(@Param('categoryId') categoryId: string, @Body() subcategory: CreateSubcategoryDto) {
+  createSubcategory(
+    @Param('categoryId') categoryId: string,
+    @Body() subcategory: any,
+  ): Promise<Subcategory> {
     return this.subcategoryService.createSubcategory(+categoryId, subcategory);
   }
 

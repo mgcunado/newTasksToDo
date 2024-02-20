@@ -1,6 +1,7 @@
 {
   "_tasks": "tasks",
   "Task": "Tarea",
+  "Category": "Categoría",
   "Subcategory": "Subcategoría",
   "Priority": "Prioridad",
   "Deadline": "Fecha límite",
@@ -22,5 +23,6 @@
   "See The Tasks": "Ver las tareas",
   "Are you sure you want to delete the task": "Estás seguro que quieres borrar la tarea ",
   "Cancel": "Cancelar",
-  "Confirm": "Confirmar"
+  "Confirm": "Confirmar",
+  "Please log in to access your tasks to do!": "Inicia sesión para acceder a tus tareas por hacer!"
 }

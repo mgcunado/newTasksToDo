@@ -24,7 +24,7 @@ export class SubcategoryService {
       ...createSubcategoryDto,
       categoryId: categoryId,
     });
-    return this.subcategoryRepository.save(newSubcategory)
+    return await this.subcategoryRepository.save(newSubcategory)
   }
 
   async getSubcategories(categoryId: number) {

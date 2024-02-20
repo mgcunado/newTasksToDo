@@ -1,27 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards, Req } from '@nestjs/common';
 import { TaskService } from './task.service';
-import { CreateTaskDto } from './dto/create-task.dto';
-import { UpdateTaskDto } from './dto/update-task.dto';
 import { JWTAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+// import { Request } from 'express';
 
+@UseGuards(JWTAuthGuard)
 @Controller()
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
 
-  @UseGuards(JWTAuthGuard)
   @Post('categories/:categoryId/subcategories/:subcategoryId/tasks')
   create(
     @Param('categoryId') categoryId: string,
     @Param('subcategoryId') subcategoryId: string,
-    @Body() createTaskDto: CreateTaskDto,
+    @Body() createTaskDto: any,
+    @Req() request: any,
   ): any {
-    return this.taskService.createTask(+categoryId, +subcategoryId, createTaskDto);
+    const userId = request?.user?.id;
+    return this.taskService.createTask(+categoryId, +subcategoryId, createTaskDto, +userId);
   }
 
   @Get('tasks/:todo?')
-  getAllTasks(@Param('todo') todo?: string, @Query('orderBy') orderBy?: string) {
+  getAllTasks(
+    @Req() request: any,
+    @Param('todo') todo?: string,
+    @Query('orderBy') orderBy?: string,
+  ) {
+    const userId = request?.user?.id;
     const orderByObj = orderBy ? JSON.parse(decodeURIComponent(orderBy)) : undefined;
-    return this.taskService.getAllTasks(todo, orderByObj);
+    return this.taskService.getAllTasks(+userId, todo, orderByObj);
   }
 
   @Get('search/:todo?/:search?')
@@ -40,13 +46,11 @@ export class TaskController {
     return this.taskService.getTask(+categoryId, +subcategoryId, +id);
   }
 
-  @UseGuards(JWTAuthGuard)
   @Patch('categories/:categoryId/subcategories/:subcategoryId/tasks/:id')
-  update(@Param('categoryId') categoryId: string, @Param('subcategoryId') subcategoryId: string, @Param('id') id: string, @Body() updateTaskDto: UpdateTaskDto) {
+  update(@Param('categoryId') categoryId: string, @Param('subcategoryId') subcategoryId: string, @Param('id') id: string, @Body() updateTaskDto: any) {
     return this.taskService.updateTask(+categoryId, +subcategoryId, +id, updateTaskDto);
   }
 
-  @UseGuards(JWTAuthGuard)
   @Delete('categories/:categoryId/subcategories/:subcategoryId/tasks/:id')
   deleteTask(@Param('categoryId') categoryId: string, @Param('subcategoryId') subcategoryId: string, @Param('id') id: string) {
     return this.taskService.deleteTask(+categoryId, +subcategoryId, +id);

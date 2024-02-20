@@ -30,7 +30,7 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
   @UseInterceptors(TokenInterceptor)
-  register(@Body() signUp: SignUp): Promise<User> {
+  register(@Body() signUp: SignUp): Promise<any> {
     return this.authService.register(signUp);
   }
 

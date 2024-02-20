@@ -3,7 +3,8 @@
  "Categories": "Categories",
  "NewTask": "New task",
  "Tasks": "Tasks",
- "TasksToDo": "TasksToDo"
+ "TasksToDo": "Tasks To Do",
+  "Login": "Login",
+  "Register": "Register",
+  "Logout": "Logout"
 }
-
-

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/user/user.entity';
 import { UserService } from 'src/user/user.service';
@@ -12,11 +12,19 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async register(signUp: SignUp): Promise<User> {
+  async register(signUp: SignUp): Promise<any> {
     const user = await this.userService.create(signUp);
+
+    if (!user) {
+      throw new HttpException('User not registered', HttpStatus.BAD_REQUEST)
+    }
+
     delete user.password;
 
-    return user;
+    return {
+      status: 'success',
+      user,
+    }
   }
 
   async login(email: string, password: string): Promise<User> {

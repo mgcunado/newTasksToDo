@@ -1,6 +1,7 @@
 {
   "_tasks": "tasks",
   "Task": "Task",
+  "Category": "Category",
   "Subcategory": "Subcategory",
   "Priority": "Priority",
   "Deadline": "Deadline",
@@ -22,5 +23,6 @@
   "See The Tasks": "See The Tasks",
   "Are you sure you want to delete the task": "Are you sure you want to delete the task ",
   "Cancel": "Cancel",
-  "Confirm": "Confirm"
+  "Confirm": "Confirm",
+  "Please log in to access your tasks to do!": "Please log in to access your tasks to do!"
 }

@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, IsNull } from 'typeorm';
+import { Not, IsNull, SelectQueryBuilder } from 'typeorm';
 import { CategoryService } from 'src/category/category.service';
 import { SubcategoryService } from 'src/subcategory/subcategory.service';
 import { Repository } from 'typeorm';
@@ -21,7 +21,7 @@ export class TaskService {
     private subcategoryService: SubcategoryService,
   ) {}
 
-  async createTask(categoryId: number, subcategoryId: number, createTaskDto: CreateTaskDto): Promise<CreateTaskResponse> {
+  async createTask(categoryId: number, subcategoryId: number, createTaskDto: CreateTaskDto, userId: number): Promise<CreateTaskResponse> {
     const subcategoryFound = await this.subcategoryService.getSubcategory(categoryId, subcategoryId)
 
     if (!subcategoryFound) {
@@ -31,6 +31,7 @@ export class TaskService {
     const newTask = this.taskRepository.create({
       ...createTaskDto,
       subcategoryId: subcategoryId,
+      authorId: userId,
     });
 
     const task = await this.taskRepository.save(newTask)
@@ -40,16 +41,27 @@ export class TaskService {
     }
   }
 
-  async getAllTasks(todo?: string, orderBy: { [key: string]: 'ASC' | 'DESC' } = { task: 'ASC' }): Promise<{ status: string; tasks: Task[] }> {
+  async getAllTasks(userId: number, todo?: string, orderBy: { [key: string]: 'ASC' | 'DESC' } = { task: 'ASC' }): Promise<{ status: string; tasks: Task[] }> {
     const done = todo === 'true';
-    const tasks = await this.taskRepository.find({
-      order: orderBy,
-      where: {
-        deadline: Not(IsNull()),
-        done: done ? false : undefined,
-      },
-      relations: ['subcategory', 'priority']
-    })
+
+    const queryBuilder: SelectQueryBuilder<Task> = this.taskRepository.createQueryBuilder('task');
+
+    queryBuilder
+      .leftJoinAndSelect('task.subcategory', 'subcategory')
+      .leftJoinAndSelect('subcategory.category', 'category')
+      .leftJoinAndSelect('task.priority', 'priority')
+      .where('task.authorId = :userId', { userId })
+      .andWhere('task.deadline IS NOT NULL')
+      .andWhere(done && 'task.done = false');
+
+    Object.keys(orderBy).forEach((key) => {
+      queryBuilder.orderBy(key, orderBy[key]);
+      if (key === 'category.name') {
+        queryBuilder.addOrderBy('subcategory.name', 'ASC');
+      }
+    });
+
+    const tasks = await queryBuilder.getMany();
 
     if (!tasks) {
       throw new HttpException('Tasks not found', HttpStatus.NOT_FOUND)
@@ -98,7 +110,7 @@ export class TaskService {
     }
   }
 
-  async updateTask(categoryId: number, subcategoryId: number, id: number, task: UpdateTaskDto) {
+  async updateTask(categoryId: number, subcategoryId: number, id: number, task: UpdateTaskDto): Promise<any> {
     // check if subcategory exists
     await this.subcategoryService.getSubcategory(categoryId, subcategoryId)
 

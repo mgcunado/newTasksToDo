@@ -3,5 +3,8 @@
  "Categories": "Categorías",
  "NewTask": "Nueva tarea",
  "Tasks": "Tareas",
- "TasksToDo": "Tareas por hacer"
+ "TasksToDo": "Tareas por hacer",
+  "Login": "Iniciar sesión",
+  "Register": "Registrarse",
+  "Logout": "Cerrar sesión"
 }
